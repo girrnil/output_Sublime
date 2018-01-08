@@ -1,0 +1,247 @@
+Git教程
+
+简介：
+   免费的分布式版本控制系统。
+
+下载地址：
+   https://git-scm.com/downloads
+
+一 安装：
+ 
+ Linux
+ 
+#测试是否安装；
+    git
+#安装
+    sudo apt-get install git.
+
+
+ windows  
+#安装 
+   从Git官网直接下载安装程序，然后按默认选项安装即可。
+
+#安装成功测试
+   安装完成后，在开始菜单里找到“Git”->“Git Bash”，蹦出一个类似命令行窗口的东西，就说明Git安装成功.
+
+  #添加用户名及邮箱；
+$ git config --global user.name "your name"# irrnil
+$ git config --global user.email "girrnil@gmail.com"
+
+二 创建版本库
+
+# 创建一个空目录
+$ mkdir learngit
+$ cd learngit
+$ pwd
+
+# pwd 用于显示当前目录
+# 如果你使用Windows系统，为了避免遇到各种莫名其妙的问题，请确保目录名（包括父目录）不包含中文。
+
+# 通过git init命令把这个目录变成Git可以管理的仓库
+$ git init
+
+# 如果你没有看到.git目录，那是因为这个目录默认是隐藏的，用ls -ah命令就可以看见。
+
+# 把文件添加到版本库
+
+# 编写一个readme.txt文件
+ Git is a version control system.
+ Git is free software.
+
+#放到learngit目录下（子目录也行），因为这是一个Git仓库，放到其他地方Git再厉害也找不到这个文件。
+
+# 把文件添加到仓库：
+$ git add readme.txt
+
+# 执行上面的命令，没有任何显示，这就对了，Unix的哲学是“没有消息就是好消息”，说明添加成功。
+
+# 把文件提交到仓库
+$ git commit -m "wrote a readme file"
+# -m后面输入的是本次提交的说明，可以输入任意内容。
+
+# commit可以一次提交很多文件，所以可以多次add不同的文件。
+$ git add file1.txt
+$ git add file2.txt file3.txt
+$ git commit -m "add 3 files."
+
+版本修改与回退
+
+# 修改readme.txt文件
+Git is a distributed version control system.
+Git is free software.
+
+# 查看仓库当前状态
+$ git status
+
+# 查看具体的修改内容
+$ git diff readme.txt 
+
+# 添加修改
+$ git add readme.txt
+
+# 查看当前仓库的状态
+$ git status
+# 提示将要被提交的修改包括readme.txt
+
+# 提交
+$ git commit -m "add distributed"
+
+$ git status
+
+# 修改readme.txt文件
+Git is a distributed version control system.
+Git is free software distributed under the GPL.
+
+# 提交：
+$ git add readme.txt
+$ git commit -m "append GPL"
+
+# 查看所有提交版本
+$ git log
+
+# 简化输出信息
+$ git log --pretty=oneline
+
+3628164fb26d48395383f8f31179f24e0882e1e0 append GPL
+ea34578d5496d7dd233c827ed32a8cd576c5ee85 add distributed
+cb926e7ea50ad11b8f9e909c05226233bf755030 wrote a readme file
+
+# 在Git中，用HEAD表示当前版本
+# 上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+
+# 把当前版本“append GPL”回退到上一个版本“add distributed”
+$ git reset --hard HEAD^
+
+# 查看回退版本是否正确
+$ cat readme.txt
+
+# 查看当前版本库状态
+$ git log
+
+# 回退到最新版本append GPL
+# 找到append GPL的commit id：3628164...
+$ git reset --hard 3628164
+
+# 查看readme.txt内容
+$ cat readme.txt
+
+
+工作区和暂存
+
+# 在工作区新增一个LICENSE文本文件
+ #LICENSE
+This is another test for git.
+
+$ git status
+
+$ git add readme.txt
+$ git add LICENSE.txt
+$ git status
+$ git coommit -m "understand how stage works"
+
+$ git status
+$ cat LICENSE.txt
+
+管理修改
+# git commit只负责提交暂存区的修改
+
+#对readme.txt做一个修改 
+
+# 修改前
+$ cat readme.txt
+Git is a distributed version control system.
+Git is free software distributed under the GPL.
+Git has a mutable index called stage.
+
+#修改后
+$ cat readme.txt
+Git is a distributed version control system.
+Git is free software distributed under the GPL.
+Git has a mutable index called stage.
+Git tracks changes.
+
+# 添加
+$ git add readme.txt
+$ git status
+
+#修改readme.txt
+$ cat readme.txt 
+Git is a distributed version control system.
+Git is free software distributed under the GPL.
+Git has a mutable index called stage.
+Git tracks changes of files
+
+# 提交
+$ git commit -m "git tracks changes"
+$ git status
+
+# 查看工作区和版本库里面最新版本的区别
+$ git diff HEAD -- readme.txt
+
+#提交第二次修改
+$ git add readme.txt
+
+撤销修改
+
+$ cat readme.txt
+Git is a distributed version control system.
+Git is free software distributed under the GPL.
+Git has a mutable index called stage.
+Git tracks changes of files.
+My stupid boss still prefers SVN.
+
+$ git status
+
+# 撤销：至上一状态
+一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+
+一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+$ git checkout -- readme.txt
+$ cat readme.txt
+
+# git checkout -- file命令中的--很重要，没有--，就变成了“切换到另一个分支”的命令
+
+# 要撤销的内容已git add至暂存区
+$ cat readme.txt
+Git is a distributed version control system.
+Git is free software distributed under the GPL.
+Git has a mutable index called stage.
+Git tracks changes of files.
+My stupid boss still prefers SVN.
+
+$ git add readme.txt
+
+$ git status
+
+# 将暂存区的修改撤销掉（unstage）
+$ git reset HEAD readme.txt
+
+
+删除文件
+
+# 添加一个新文件test.txt到Git并提交
+$ git add test.txt
+$ git commit -m "add test.txt" 
+
+# 删除
+# 一般情况下，通常直接在文件管理器中把没用的文件删了，或者用rm命令删了；
+$ rm test.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
