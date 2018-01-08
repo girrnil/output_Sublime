@@ -34,7 +34,7 @@ net stop mysql
 
 2.net start mysql    // 说明：该命令是启动 mysql 服务
 mysql -u root -p    // 说明：该命令是登录 root 用户
-Enter password: 先前设置的 root 用户的密码（810923）
+Enter password: 先前设置的 root 用户的密码（81***3）
 
 3.正确登录后，就可以对数据进行操作了如：增、删、改、查等等。示例：
 mysql> show databases;   // 显示所有数据库
